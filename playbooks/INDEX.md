@@ -35,18 +35,19 @@ openspec/              OpenSpec 工作流产物
 
 ---
 
-## 价值投资四步模型速查（方法论总纲）
+## 价值投资五步分析流程（方法论总纲）
 
-> 分析任何标的按四步走：**① 定类型 → ② 拆财务 → ③ 估值打分 → ④ 排雷纪律**。顺序是灵魂——先搞清楚是什么生意，再验证利润真假，然后才谈贵不贵、买不买。
+> 分析任何标的按五步走：**① 定性 → ② 定量 → ③ 估值 → ④ 排雷 → ⑤ 执行**。顺序是灵魂——先搞清楚是什么生意、谁在管，再验证数字真假，然后才谈估值，最后才是买多少、什么时候买、什么时候卖。每一步之间有明确的 go/no-go 决策点。
 
-| 步骤 | 要回答的问题 | 工具文档 | 应用案例 |
-|------|------------|----------|----------|
-| ① 定类型 | 周期股还是成长股？到底赚什么钱？ | [[cycle-growth-spectrum-framework-周期光谱框架\|周期光谱框架]]、[[stock-classification-template-股票分类模板\|股票分类模板]]、[[fake-concept-detector-假概念识别\|假概念识别]] | 宇通（周期成长）、中车（垄断周期）、平安（金融周期） |
-| ② 拆财务 | 利润是真的吗？现金流/应收/扣非/派息质量 | [[fake-concept-detector-假概念识别\|假概念识别]]、[[周期股分析检查清单\|周期股分析检查清单]] | 宇通现金流 +247%、汤臣应收仅 4.4%、银行拨备 |
-| ③ 估值打分 | 够不够格？现在贵不贵？ | 成长股 → [[fisher-15-points-scoring-card-费雪15条评分卡\|费雪15条评分卡]]；低估值 → [[deep-value-vs-trap-checklist-深度价值vs价值陷阱\|八维打分卡]]；攒息 → [[dividend-income-funnel-攒股收息漏斗\|攒股收息漏斗]]；安全边际 → [[graham-value-investing-格雷厄姆价值投资\|格雷厄姆价值投资]]、[[security-analysis-证券分析\|证券分析]] | 宇通费雪 6 分、汤臣八维 4 分警惕、成都 ROE/PB 匹配 |
-| ④ 排雷纪律 | 有什么坑？怎么买卖？ | [[buy-timing-confirmation-checklist-买入时机确认清单\|买入时机确认清单]]、[[sell-too-early-pre-sale-checklist-卖出前检查清单\|卖出前检查清单]]、[[sell-too-early-attribution-framework-卖飞归因框架\|卖飞归因框架]]、[[anti-narrative-detector-反叙事识别\|反叙事识别]] | 汤臣 AI 投资红旗、宇通 7 月销量预警、北京银行高息陷阱 |
+| 步骤 | 要回答的问题 | 工具文档 | 决策点 |
+|------|------------|----------|--------|
+| **① 定性** | 这是什么生意？护城河在哪？管理层靠谱吗？ | [[cycle-growth-spectrum-framework-周期光谱框架\|周期光谱]]、[[stock-classification-template-股票分类模板\|股票分类]]、[[fake-concept-detector-假概念识别\|假概念识别]]、[[moat-quantitative-assessment-护城河量化评估卡\|护城河量化]]、[[duan-yongping-investment-framework\|段永平框架]]、[[buffett-way-巴菲特之道\|巴菲特之道]] | 是否理解这个生意？护城河是否存在？→ 否 = 放弃 |
+| **② 定量** | 利润是真的吗？现金流/应收/扣非/派息质量？ | [[accounting-red-flags-会计排雷系统\|会计排雷 24 条]]、[[fake-concept-detector-假概念识别\|假概念识别]]、[[周期股分析检查清单\|周期股检查清单]]、[[deep-value-vs-trap-checklist-深度价值vs价值陷阱\|八维打分卡]] | 数字是否真实？现金流是否健康？→ 否 = 放弃 |
+| **③ 估值** | 用什么指标估值？安全边际够不够？ | 3a 选锚 → [[industry-valuation-guide-行业估值差异指南\|行业估值指南]]；3b 估值 → [[fisher-15-points-scoring-card-费雪15条评分卡\|费雪 15 条]]、[[dividend-income-funnel-攒股收息漏斗\|攒息漏斗]]、[[frameworks/03-dcf-valuation\|DCF]]、[[graham-value-investing-格雷厄姆价值投资\|格雷厄姆价值投资]]、[[security-analysis-证券分析\|证券分析]] | 安全边际是否足够？→ 否 = 等待或放弃 |
+| **④ 排雷** | 有什么致命风险？市场叙事是否合理？ | [[hk-stock-red-flag-checklist-港股红旗清单\|港股红旗]]、[[anti-narrative-detector-反叙事识别\|反叙事识别]]、[[bubble-anatomy-framework-泡沫解剖框架\|泡沫解剖]]、[[soros-reflexivity-索罗斯反身性\|索罗斯反身性]] | 是否有致命风险？→ 是 = 放弃 |
+| **⑤ 执行** | 买多少？什么时候买？什么时候卖？ | 5a 仓位 → [[position-sizing-framework-仓位管理框架\|仓位管理（凯利公式）]]；5b 买入 → [[buy-timing-confirmation-checklist-买入时机确认清单\|买入时机六信号]]；5c 卖出 → [[sell-too-early-pre-sale-checklist-卖出前检查清单\|卖出检查清单]]、[[sell-too-early-attribution-framework-卖飞归因框架\|卖飞归因]] | — |
 
-**理论基底**：[[buffett-way-巴菲特之道\|巴菲特之道]]、[[security-analysis-证券分析\|证券分析]]、[[graham-value-investing-格雷厄姆价值投资\|格雷厄姆价值投资]]（原书提取文本在 `_books/`：聪明的投资者/证券分析/巴菲特之道/怎样选择成长股）
+**理论基底**：[[buffett-way-巴菲特之道\|巴菲特之道]]、[[security-analysis-证券分析\|证券分析]]、[[graham-value-investing-格雷厄姆价值投资\|格雷厄姆价值投资]]、[[peter-lynch-framework-彼得林奇投资框架\|彼得·林奇]]、[[howard-marks-framework-霍华德马克斯投资框架\|霍华德·马克斯]]、[[duan-yongping-investment-framework\|段永平]]
 
 ---
 
