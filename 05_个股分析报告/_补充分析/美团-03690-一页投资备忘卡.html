@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>美团-W (03690.HK) 一页投资备忘卡</title>
+<style>
+  :root{
+    --bg:#f5f6fa;
+    --card:#ffffff;
+    --ink:#1a1d24;
+    --muted:#6b7280;
+    --red:#d63a3a;
+    --red-bg:#fdeaea;
+    --green:#0f9d58;
+    --green-bg:#e6f6ec;
+    --amber:#e09900;
+    --amber-bg:#fdf3d9;
+    --blue:#1f6feb;
+    --blue-bg:#e7f0fd;
+    --line:#e6e8ee;
+    --shadow:0 4px 20px rgba(0,0,0,.06);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    font-family:"Noto Sans CJK SC","WenQuanYi Micro Hei","PingFang SC",system-ui,sans-serif;
+    background:var(--bg);color:var(--ink);padding:24px;line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    font-size:13px;
+  }
+  .card{
+    max-width:960px;margin:0 auto;background:var(--card);border-radius:14px;
+    box-shadow:var(--shadow);overflow:hidden;
+  }
+  .head{
+    background:linear-gradient(135deg,#111827 0%,#1f2937 100%);
+    color:#fff;padding:20px 24px;position:relative;
+  }
+  .head .tag-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:8px;}
+  .tag{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:600;}
+  .tag.rank{background:#f0b429;color:#1a1d24;}
+  .head h1{font-size:24px;font-weight:800;letter-spacing:.5px;}
+  .head .sub{color:#c7cdd6;font-size:12.5px;margin-top:4px;}
+  .head .ticker{font-size:13px;color:#9aa4b2;}
+  .score-big{position:absolute;right:24px;top:20px;text-align:center;background:rgba(255,255,255,.1);border-radius:12px;padding:8px 16px;}
+  .score-big .num{font-size:28px;font-weight:800;color:#f0b429;}
+  .score-big .lab{font-size:11px;color:#c7cdd6;}
+  .body{padding:18px 24px 22px;}
+  .core{
+    background:var(--amber-bg);border:1px solid #f3e2b8;border-left:4px solid var(--amber);
+    padding:12px 14px;border-radius:8px;margin-bottom:16px;
+  }
+  .core b{color:var(--amber);}
+  .core .graded{color:var(--amber);font-weight:800;}
+  .grid{display:grid;grid-template-columns:1.3fr 1fr;gap:14px;margin-bottom:16px;}
+  @media(max-width:680px){.grid{grid-template-columns:1fr;}}
+  h2{font-size:13.5px;font-weight:800;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+  h2::before{content:"";width:4px;height:14px;background:var(--blue);border-radius:2px;display:inline-block;}
+  .block{background:#fafbfc;border:1px solid var(--line);border-radius:10px;padding:12px 14px;}
+  table{width:100%;border-collapse:collapse;font-size:12px;}
+  th,td{text-align:left;padding:5px 8px;border-bottom:1px solid var(--line);vertical-align:top;}
+  th{color:var(--muted);font-weight:600;background:#f3f4f6;white-space:nowrap;}
+  td:last-child{color:var(--muted);}
+  .up{color:var(--red);font-weight:700;}
+  .dn{color:var(--green);font-weight:700;}
+  .ok{color:var(--green);font-weight:800;}
+  .nok{color:var(--red);font-weight:700;}
+  .pill{display:inline-block;font-size:11px;padding:1px 8px;border-radius:10px;font-weight:700;}
+  .pill.ok{background:var(--green-bg);color:var(--green);}
+  .pill.nok{background:var(--red-bg);color:var(--red);}
+  .signal{margin-bottom:14px;}
+  .signals{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
+  @media(max-width:680px){.signals{grid-template-columns:1fr;}}
+  .sig{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:12px;}
+  .sig .s-label{flex:1;color:var(--muted);}
+  .sig .s-val{font-weight:700;}
+  .ops{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;font-size:12px;}
+  .op{background:#fff;border:1px solid var(--line);border-radius:8px;padding:9px 11px;}
+  .op .k{color:var(--muted);font-size:11px;}
+  .op .v{font-weight:700;margin-top:2px;}
+  .risk li{font-size:12px;margin:6px 0 6px 16px;}
+  .cal li{font-size:12px;margin:6px 0 6px 16px;}
+  .footer{font-size:10.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:10px;margin-top:4px;}
+  ul{padding-left:0;}
+  .disclaimer{font-size:10.5px;color:#9aa3b2;text-align:center;margin-top:14px;}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="head">
+    <div class="tag-row">
+      <span class="tag rank">评级上调 · 9/02</span>
+      <span class="tag" style="background:rgba(255,255,255,.15)">困境反转</span>
+      <span class="tag" style="background:rgba(255,255,255,.15)">即时零售+本地生活龙头</span>
+    </div>
+    <h1>美团-W <span class="ticker">03690.HK</span></h1>
+    <div class="sub">综合评分 <b style="color:#f0b429">23/35 · C级</b>（9/01: 22 → 9/02: 23）· 现价约 76.65 HKD · PB ~2.4x（历史最低）</div>
+    <div class="score-big">
+      <div class="num">C级</div>
+      <div class="lab">拐点确认+预期修复</div>
+    </div>
+  </div>
+
+  <div class="body">
+    <div class="core">
+      <b>投资逻辑一句话：</b>美团是中国即时配送的<b>基础设施</b>，"大家都用"的高粘性是 70% 外送市占 + 30元+高价值订单 70%+ 的护城河。补贴大战已从"绞杀"走向"收敛"——<b>经营现金流转正、Q2 单季扭亏、王兴承诺回购/变现、监管新规助攻</b>，评级连续上调至 C级(23/35)。
+    </div>
+
+    <div class="signals">
+      <div class="sig"><span class="s-label">评级轨迹</span><span class="s-val">D级19 → C级23</span></div>
+      <div class="sig"><span class="s-label">单季扭亏触发器</span><span class="s-val ok">Q2已兑现 ▸ Q3(下步)</span></div>
+    </div>
+
+    <div class="grid">
+      <div class="block">
+        <h2>核心拐点（2026H1，8/28 中报）</h2>
+        <table>
+          <tr><th>指标</th><th>FY2025</th><th>2026H1</th><th>判定</th></tr>
+          <tr><td>经营现金流</td><td>−138亿</td><td class="up">+27.2亿</td><td><span class="pill ok">转正</span></td></tr>
+          <tr><td>净利润(H1)</td><td>−234亿</td><td class="up">−46.7亿</td><td><span class="pill ok">大收窄</span></td></tr>
+          <tr><td>Q2 单季期内利润</td><td>—</td><td class="up">+21.55亿</td><td><span class="pill ok">首度扭亏</span></td></tr>
+          <tr><td>ROE</td><td>−14.4%</td><td class="up">−2.9%</td><td>接近平衡</td></tr>
+          <tr><td>营收增速</td><td>+8.1%</td><td class="up">+10.1%</td><td>重回加速</td></tr>
+          <tr><td>毛利率</td><td>30.4%</td><td class="up">31.2%</td><td>修复</td></tr>
+          <tr><td>自由现金流</td><td>−263亿</td><td class="nok">−73.4亿</td><td><span class="pill nok">仍负</span></td></tr>
+        </table>
+      </div>
+
+      <div class="block">
+        <h2>王兴股东会"三大定心丸"(6/26)</h2>
+        <table>
+          <tr><th>定心丸</th><th>要点</th></tr>
+          <tr><td>① 一股不卖</td><td>成立至今未卖、无卖股计划；基金会10%为公益不可撤销</td></tr>
+          <tr><td>② 重启回购</td><td>CFO称"严重低估"，授权可再买回约一成；6/27已执行</td></tr>
+          <tr><td>③ 变现投资</td><td>理想/智谱/宇树等，投资650亿+，解禁后择机变现</td></tr>
+          <tr><td colspan="2" style="color:var(--muted)">另复盘两大失误：出海太晚、美团优选模式缺陷</td></tr>
+        </table>
+        <div style="margin-top:8px;font-size:11.5px;background:var(--blue-bg);border-radius:6px;padding:7px 9px;color:#1f4e91;">
+          政策助攻 6/17：市场监管总局《外卖补贴行为规范十条》征求意见，美团/闪购/京东均"坚决拥护"，助推战火收敛。
+        </div>
+      </div>
+    </div>
+
+    <div class="block" style="margin-bottom:16px;">
+      <h2>操作建议（再升级，分批 · 勿一把梭）</h2>
+      <div class="ops">
+        <div class="op"><div class="k">建议仓位</div><div class="v">5–8%（保守2-3 / 均衡5-6 / 进取6-8%）</div></div>
+        <div class="op"><div class="k">建仓区间</div><div class="v">70–80 HKD（现价已进入）</div></div>
+        <div class="op"><div class="k">下一触发器</div><div class="v ok">Q3 盈利延续 + 连续两季OP转正 → 晋级B级</div></div>
+        <div class="op"><div class="k">目标价</div><div class="v">基准 107.5 · 乐观 150 HKD</div></div>
+        <div class="op"><div class="k">止损价</div><div class="v nok">68 HKD（跌破前低+拐点证伪）</div></div>
+        <div class="op"><div class="k">类型</div><div class="v">中期反转（具备向成长仓转化条件）</div></div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="block">
+        <h2>四大风险（排雷）</h2>
+        <ul class="risk">
+          <li><b>补贴大战只是收敛、未终结</b>：H1累计仍亏、自由现金流−73.4亿</li>
+          <li><b>阿里闪购/饿了么反弹</b>：任何一方再度加码补贴 → 重现压制</li>
+          <li><b>回购"雷声大雨点小"</b>：实际执行体量偏小(约2亿)，托底力度有限</li>
+          <li><b>新业务淘金未验</b>：出海(对标KeeTa)与黑珍珠/到店酒旅的盈利贡献待证</li>
+        </ul>
+      </div>
+      <div class="block">
+        <h2>跟踪日历</h2>
+        <ul class="cal">
+          <li><b>Q3三季报(最强)</b>：盈利能否延续 → 上探B级 / 转亏回落C级</li>
+          <li>每季：经营CF、阿里闪购亏损、毛利率</li>
+          <li>事件：回购放量、650亿投资变现进度</li>
+          <li>政策：《补贴规范十条》正式落地与执行</li>
+        </ul>
+        <div style="margin-top:8px;font-size:11px;color:var(--muted);">
+          与可比：腾讯29/35 &gt; 拼多多24/35 &gt; <b>美团23/35</b> &gt; 阿里22/35
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      依据《美团-03690 五步分析报告》(2026-08-12 初稿 / 8-25 复评 / 9-01 财报复盘 / 9-02 王兴股东会+Q2扭亏增量)。
+      数据来源：同花顺 iFinD、通达信 TDX、央视网&每日经济新闻(6/26股东会)、网易&科创板日报(Q2报)。
+    </div>
+  </div>
+</div>
+<div class="disclaimer">本备忘卡基于公开信息综合分析，不构成任何投资建议。投资有风险，决策需谨慎。</div>
+</body>
+</html>

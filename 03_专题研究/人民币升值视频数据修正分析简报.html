@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>人民币升值逻辑 · 视频数据修正分析简报</title>
+<style>
+  :root{
+    --bg:#0e1420;
+    --bg2:#151d2e;
+    --bg3:#1b2538;
+    --ink:#e8edf5;
+    --muted:#9aa7bd;
+    --rule:#2a3550;
+    --accent:#4f8cff;
+    --accent2:#ffb454;
+    --good:#38c98b;
+    --bad:#ff6b6b;
+    --warn:#ffcf5c;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:-apple-system,"PingFang SC","Microsoft YaHei","Noto Sans CJK SC","WenQuanYi Micro Hei",sans-serif;
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:960px;margin:0 auto;padding:0 24px 80px;}
+  .hero{
+    padding:72px 24px 48px;
+    text-align:center;
+    background:
+      radial-gradient(1200px 400px at 50% -100px, rgba(79,140,255,0.18), transparent 60%),
+      var(--bg);
+    border-bottom:1px solid var(--rule);
+  }
+  .hero .kicker{
+    display:inline-block;font-size:12px;letter-spacing:.18em;color:var(--accent);
+    border:1px solid var(--rule);padding:6px 14px;border-radius:20px;margin-bottom:22px;
+  }
+  .hero h1{font-size:34px;font-weight:800;letter-spacing:.02em;line-height:1.3;}
+  .hero h1 .hl{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .hero .sub{color:var(--muted);margin-top:16px;font-size:15px;}
+  .hero .meta{color:var(--muted);font-size:12px;margin-top:22px;letter-spacing:.05em;}
+
+  section{padding:56px 0 0;}
+  h2{
+    font-size:22px;font-weight:800;margin-bottom:6px;
+    display:flex;align-items:center;gap:12px;
+  }
+  h2 .num{
+    font-size:13px;color:var(--accent);border:1px solid var(--accent);
+    width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+  .lead{color:var(--muted);font-size:14px;margin-bottom:28px;}
+  .card{background:var(--bg2);border:1px solid var(--rule);border-radius:14px;padding:24px;margin-bottom:20px;}
+
+  /* verdict banner */
+  .verdict{
+    display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap;
+    background:linear-gradient(135deg,var(--bg3),var(--bg2));
+  }
+  .vmain{flex:1 1 320px;}
+  .vmain .tag{
+    display:inline-block;font-size:12px;font-weight:700;color:#07111f;
+    background:var(--warn);padding:4px 12px;border-radius:6px;margin-bottom:10px;
+  }
+  .vmain h3{font-size:20px;font-weight:800;margin-bottom:8px;}
+  .vmain p{color:var(--muted);font-size:14px;}
+  .vstats{flex:1 1 260px;display:grid;gap:12px;}
+  .vstat{background:var(--bg);border:1px solid var(--rule);border-radius:10px;padding:14px 16px;}
+  .vstat .lbl{font-size:12px;color:var(--muted);}
+  .vstat .val{font-size:26px;font-weight:800;color:var(--accent);}
+  .vstat .val .unit{font-size:13px;color:var(--muted);font-weight:500;}
+
+  /* comparison table */
+  .tblWrap{overflow-x:auto;}
+  table{width:100%;border-collapse:collapse;font-size:14px;min-width:720px;}
+  th{background:var(--bg3);color:var(--muted);font-weight:600;font-size:12px;text-align:left;padding:12px 14px;border-bottom:2px solid var(--rule);white-space:nowrap;}
+  td{padding:14px;border-bottom:1px solid var(--rule);vertical-align:top;}
+  tr:hover td{background:rgba(255,255,255,0.02);}
+  .src{color:var(--bad);font-weight:700;white-space:nowrap;}
+  .ok{color:var(--good);font-weight:700;white-space:nowrap;}
+  .diff{color:var(--warn);font-weight:700;white-space:nowrap;}
+  .cell-note{font-size:12px;color:var(--muted);}
+
+  /* charts */
+  .charts{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  @media(max-width:720px){.charts{grid-template-columns:1fr;}}
+  .chart{background:var(--bg2);border:1px solid var(--rule);border-radius:14px;padding:20px;}
+  .chart h4{font-size:14px;font-weight:700;margin-bottom:4px;}
+  .chart .csub{font-size:12px;color:var(--muted);margin-bottom:16px;}
+  .bars{display:flex;flex-direction:column;gap:14px;}
+  .bar-row .bar-top{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:5px;}
+  .bar-row .bar-top b{color:var(--ink);}
+  .bar-track{background:var(--bg);border-radius:6px;height:14px;overflow:hidden;}
+  .bar-fill{height:100%;border-radius:6px;}
+  .bar-fill.blue{background:linear-gradient(90deg,#3b6fd0,#4f8cff);}
+  .bar-fill.amber{background:linear-gradient(90deg,#d99b2e,#ffb454);}
+
+  /* logic errors */
+  .logic{display:grid;gap:16px;}
+  .logic-item{background:var(--bg2);border:1px solid var(--rule);border-radius:12px;padding:18px 20px;border-left:4px solid var(--bad);}
+  .logic-item.valid{border-left-color:var(--good);}
+  .logic-item .q{font-size:13px;font-weight:700;color:var(--bad);margin-bottom:6px;}
+  .logic-item.valid .q{color:var(--good);}
+  .logic-item .claim{font-size:14px;font-weight:600;margin-bottom:6px;}
+  .logic-item .fix{font-size:13px;color:var(--muted);}
+
+  /* corrected analysis */
+  .col{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  @media(max-width:720px){.col{grid-template-columns:1fr;}}
+  .col .card h3{font-size:16px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+  .col .card h3 .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);}
+  .col .card p{font-size:14px;color:var(--muted);margin-bottom:10px;}
+  .col .card b{color:var(--ink);}
+
+  .risk{background:var(--bg2);border:1px solid var(--rule);border-radius:14px;padding:24px;}
+  .risk ul{list-style:none;}
+  .risk li{padding:12px 0;border-bottom:1px solid var(--rule);font-size:14px;color:var(--muted);}
+  .risk li:last-child{border-bottom:none;}
+  .risk li b{color:var(--warn);}
+
+  .takeaway{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+  @media(max-width:720px){.takeaway{grid-template-columns:1fr;}}
+  .tk{background:var(--bg2);border:1px solid var(--rule);border-radius:12px;padding:20px;border-top:3px solid var(--accent);}
+  .tk .n{font-size:30px;font-weight:800;color:var(--accent);opacity:.35;}
+  .tk h4{font-size:15px;font-weight:700;margin:6px 0 8px;}
+  .tk p{font-size:13px;color:var(--muted);}
+
+  footer{margin-top:64px;padding-top:32px;border-top:1px solid var(--rule);}
+  footer h3{font-size:14px;color:var(--muted);margin-bottom:14px;letter-spacing:.08em;}
+  .sources{list-style:none;font-size:12px;color:var(--muted);}
+  .sources li{padding:6px 0;line-height:1.6;}
+  .disclaimer{font-size:12px;color:var(--muted);margin-top:20px;opacity:.8;line-height:1.6;}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <span class="kicker">数据核验 · FINANCIAL FACT-CHECK</span>
+  <h1>人民币升值逻辑<br><span class="hl">视频数据修正分析简报</span></h1>
+  <p class="sub">对短视频《人民币为什么升值？》中的关键数据逐项核验，修正错误，还原准确分析框架</p>
+  <div class="meta">数据时点：2026年7月 · 核验来源：国家统计局 / 海关总署 / 财政部 / 中国货币网 / 外汇交易中心</div>
+</div>
+
+<div class="wrap">
+
+  <!-- Verdict -->
+  <section>
+    <div class="card verdict">
+      <div class="vmain">
+        <span class="tag">总体评价</span>
+        <h3>方向正确，数据多处失真，因果链条被过度简化</h3>
+        <p>视频的核心判断——"外贸高顺差 + 资本流出受限 → 人民币升值压力"——符合当前宏观逻辑，方向正确。但其中多个关键数据存在<strong>夸大、混淆或口径错误</strong>，且将"高科技赚钱"简单归因为升值原因，忽略汇率的多因素决定机制。本简报逐项修正。</p>
+      </div>
+      <div class="vstats">
+        <div class="vstat"><div class="lbl">2026年7月 CPI 同比</div><div class="val">+0.5<span class="unit">%</span></div></div>
+        <div class="vstat"><div class="lbl">2025全年贸易顺差（美元计价）</div><div class="val">1.19<span class="unit">万亿美元</span></div></div>
+        <div class="vstat"><div class="lbl">2026上半年货物贸易顺差</div><div class="val">5263<span class="unit">亿美元</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Data comparison -->
+  <section>
+    <h2><span class="num">01</span>核心数据核验对比</h2>
+    <p class="lead">以下为视频主张与权威来源实际数据的逐项对照。红色=错误，黄色=有偏差/口径混淆，绿色=基本准确。</p>
+    <div class="card tblWrap">
+      <table>
+        <thead>
+          <tr><th>数据项</th><th>视频主张</th><th>核验结果（权威来源）</th><th>判定</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>国内通胀率</td>
+            <td>0.9%–1.2%</td>
+            <td>2026年7月 CPI 同比 <b>+0.5%</b>；核心 CPI <b>+0.9%</b>（国家统计局）</td>
+            <td class="src">错误</td>
+          </tr>
+          <tr>
+            <td>100万现金年贬值</td>
+            <td>一年至少贬值1万</td>
+            <td>按 CPI 0.5% 计约贬值 5000 元，不到1万元</td>
+            <td class="src">夸大</td>
+          </tr>
+          <tr>
+            <td>一年期存款利率</td>
+            <td>0.9%</td>
+            <td>国有大行挂牌 <b>0.95%</b>（2026年8月）</td>
+            <td class="diff">有偏差</td>
+          </tr>
+          <tr>
+            <td>三年期存款利率</td>
+            <td>1.25%</td>
+            <td>国有大行挂牌 <b>1.25%</b></td>
+            <td class="ok">准确</td>
+          </tr>
+          <tr>
+            <td>国债余额</td>
+            <td>42万亿</td>
+            <td>2025年末 <b>41.23万亿</b>（财政部）</td>
+            <td class="diff">接近</td>
+          </tr>
+          <tr>
+            <td>地方债余额</td>
+            <td>58.5万亿</td>
+            <td>2025年末 <b>54.82万亿</b>（含置换存量隐性债务）</td>
+            <td class="src">错误</td>
+          </tr>
+          <tr>
+            <td>政府债务合计</td>
+            <td>100.5万亿</td>
+            <td>国债+地方债约 <b>96万亿</b>；社会上"100万亿"口径还含部分隐性口径</td>
+            <td class="diff">夸大</td>
+          </tr>
+          <tr>
+            <td>一年期国债利率</td>
+            <td>1.25%</td>
+            <td>1年期国债收益率约 <b>1.21%</b>（2026-08-14）</td>
+            <td class="diff">贴近</td>
+          </tr>
+          <tr>
+            <td>三年期国债利率</td>
+            <td>1.6%</td>
+            <td>3年期国债发行利率约 <b>1.40%</b>，二级市场更低</td>
+            <td class="src">错误</td>
+          </tr>
+          <tr>
+            <td>人民币兑美元</td>
+            <td>从7.3升至6.75，升值7%</td>
+            <td>2026年7月即期升破6.75收于 <b>6.747</b>；从7.3到6.75实际升值约 <b>8%</b></td>
+            <td class="diff">低估</td>
+          </tr>
+          <tr>
+            <td>外贸出口增速</td>
+            <td>7月出口同比+23.9%</td>
+            <td>+23.9% 为 <b>7月单月</b>（美元计价）；1–7月累计仅 <b>+12.4%</b>（美元）/ +14%（人民币）</td>
+            <td class="diff">口径混淆</td>
+          </tr>
+          <tr>
+            <td>半导体等高科技出口</td>
+            <td>同比增长超50%</td>
+            <td>2026上半年集成电路出口 <b>+88.7%</b>（人民币）、1–7月累计 <b>+99.5%</b>（美元）——实际远高于50%</td>
+            <td class="diff">低估</td>
+          </tr>
+          <tr>
+            <td>2025贸易顺差</td>
+            <td>1.2万亿美元创纪录</td>
+            <td>2025全年约 <b>1.19万亿美元</b>，历史首次破万亿（海关总署）</td>
+            <td class="ok">基本准确</td>
+          </tr>
+          <tr>
+            <td>美国存款利率</td>
+            <td>一年期接近4%</td>
+            <td>美元高息定存约 3.4%–4%；美联储政策利率已降至 <b>2.25%–2.5%</b></td>
+            <td class="diff">偏高</td>
+          </tr>
+          <tr>
+            <td>欧洲存款利率</td>
+            <td>接近3%</td>
+            <td>欧元区主要再融资利率 <b>2.40%</b>，普通存款利率远低于3%</td>
+            <td class="src">错误</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Charts -->
+  <section>
+    <h2><span class="num">02</span>关键数据可视化</h2>
+    <p class="lead">对比视频主张（琥珀色）与实际数据（蓝色），直观呈现偏差幅度。</p>
+    <div class="charts">
+      <div class="chart">
+        <h4>通胀率（2026年7月，同比 %）</h4>
+        <div class="csub">视频主张 vs 统计局实际</div>
+        <div class="bars">
+          <div class="bar-row">
+            <div class="bar-top"><span>视频主张 0.9–1.2%</span><b>~1.0%</b></div>
+            <div class="bar-track"><div class="bar-fill amber" style="width:83%"></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-top"><span>实际 CPI 0.5%</span><b>0.5%</b></div>
+            <div class="bar-track"><div class="bar-fill blue" style="width:42%"></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-top"><span>核心 CPI 0.9%</span><b>0.9%</b></div>
+            <div class="bar-track"><div class="bar-fill blue" style="width:75%"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="chart">
+        <h4>政府债务余额（万亿人民币）</h4>
+        <div class="csub">2025年末实际（财政部）</div>
+        <div class="bars">
+          <div class="bar-row">
+            <div class="bar-top"><span>国债 41.23</span><b>41.2</b></div>
+            <div class="bar-track"><div class="bar-fill blue" style="width:69%"></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-top"><span>地方债 54.82</span><b>54.8</b></div>
+            <div class="bar-track"><div class="bar-fill blue" style="width:91%"></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-top"><span>视频主张合计 100.5</span><b>100.5</b></div>
+            <div class="bar-track"><div class="bar-fill amber" style="width:100%"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="chart">
+        <h4>集成电路出口增速（%）</h4>
+        <div class="csub">视频主张"超50%" vs 实际</div>
+        <div class="bars">
+          <div class="bar-row">
+            <div class="bar-top"><span>视频主张</span><b>&gt;50%</b></div>
+            <div class="bar-track"><div class="bar-fill amber" style="width:50%"></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-top"><span>2026上半年 人民币计价</span><b>+88.7%</b></div>
+            <div class="bar-track"><div class="bar-fill blue" style="width:89%"></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-top"><span>1–7月累计 美元计价</span><b>+99.5%</b></div>
+            <div class="bar-track"><div class="bar-fill blue" style="width:100%"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="chart">
+        <h4>人民币兑美元汇率</h4>
+        <div class="csub">2026年7月即期汇率（6.747）vs 视频起点</div>
+        <div class="bars">
+          <div class="bar-row">
+            <div class="bar-top"><span>视频起点 7.30</span><b>7.30</b></div>
+            <div class="bar-track"><div class="bar-fill amber" style="width:100%"></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-top"><span>视频声称 6.75 / 升值7%</span><b>6.75</b></div>
+            <div class="bar-track"><div class="bar-fill amber" style="width:92%"></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-top"><span>实际约 6.747 / 升值≈8%</span><b>6.747</b></div>
+            <div class="bar-track"><div class="bar-fill blue" style="width:92%"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Logic analysis -->
+  <section>
+    <h2><span class="num">03</span>逻辑链核验</h2>
+    <p class="lead">区分"站得住脚"与"被过度简化"的论证环节。</p>
+    <div class="logic">
+      <div class="logic-item valid">
+        <div class="q">论证成立</div>
+        <div class="claim">高贸易顺差带来美元流入，而严格的资本管制与 QDII 额度限制限制了资金外流，形成人民币升值压力。</div>
+        <div class="fix">方向正确。2025年顺差1.19万亿美元、2026上半年经常账户顺差3794亿美元，叠加资本流出受限，是支撑人民币的核心逻辑。</div>
+      </div>
+      <div class="logic-item valid">
+        <div class="q">论证成立</div>
+        <div class="claim">"借新还旧"是政府债务存续的真实机制，利息需以财政收入偿付。</div>
+        <div class="fix">方向正确。但"本金不用还"表述过于绝对，实际是"到期滚动续发"，债务存量仍在累积。</div>
+      </div>
+      <div class="logic-item">
+        <div class="q">被过度简化</div>
+        <div class="claim">"高科技赚钱的过程就是人民币升值的原因"。</div>
+        <div class="fix">这是最薄弱的因果环节。人民币升值是多因素共同作用的结果（顺差、货币政策、资本流动、美元周期），不能简单归因于"高科技赚钱"。科技出口的繁荣是顺差的来源之一，但把产业升级直接等同于升值动因，属于单一因果谬误。</div>
+      </div>
+      <div class="logic-item">
+        <div class="q">被过度简化</div>
+        <div class="claim">"只要钱在银行，大家都在科技与化债的路上，升值不会反转"。</div>
+        <div class="fix">升值能否持续取决于中美利差、美元走向、贸易摩擦与出口企业承压等多重变量，不存在"单向必然"。历史上人民币升值周期多次出现反转。</div>
+      </div>
+      <div class="logic-item">
+        <div class="q">被过度简化</div>
+        <div class="claim">"人民币升值→出口企业成本上升→必然贸易摩擦"。</div>
+        <div class="fix">贸易摩擦的因素复杂，汇率仅是其中之一；且2026上半年出口+14%表明升值尚未显著压制出口总量，此链条存在片面性。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Corrected analysis -->
+  <section>
+    <h2><span class="num">04</span>修正后的准确分析框架</h2>
+    <p class="lead">基于核验数据，重建人民币近期升值的真实驱动因素与传统制造业的承压现实。</p>
+    <div class="col">
+      <div class="card">
+        <h3><span class="dot"></span>人民币升值：真实的驱动因素</h3>
+        <p><b>① 天量贸易顺差。</b>2025年货物顺差1.19万亿美元创纪录，2026上半年货物顺差5263亿美元，美元持续净流入。</p>
+        <p><b>② 资本管制与流出受限。</b>个人购汇额度、QDII额度限制压抑资本外流，资金"进多出少"。</p>
+        <p><b>③ 科技/高端制造出口高景气。</b>集成电路1–7月出口+99.5%，AI产业链（光模块、存储、PCB）拉动结构升级——这是顺差的关键增量，而非升值的唯一原因。</p>
+        <p><b>④ 政策与市场预期。</b>央行稳汇率意图、市场对人民币资产的配置需求共同作用。</p>
+      </div>
+      <div class="card">
+        <h3><span class="dot"></span>被视频夸大的部分</h3>
+        <p><b>通胀与贬值损失。</b>视频称"通胀0.9–1.2%、百万每年贬值1万"，实际 CPI 仅0.5%，对应年贬值约5000元，<b>被明显夸大</b>。</p>
+        <p><b>债务规模。</b>政府债务合计约96万亿（国债41.2+地方债54.8），而非视频所称100.5万亿。</p>
+        <p><b>海外利率差。</b>美联储政策利率已降至2.25–2.5%，美元高息定存约3.4%，欧洲存款利率远低于3%，视频的"利差诱惑"被放大。</p>
+        <p><b>出口增速。</b>"+23.9%"是7月单月数据，1–7月累计仅+12.4%，增速呈回落态势，视频用单月数暗示全年高增，形成误导。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Risk -->
+  <section>
+    <h2><span class="num">05</span>传统制造业的真实承压</h2>
+    <div class="risk">
+      <ul>
+        <li><b>升值侵蚀出口利润。</b>人民币兑美元一年升值约8%，对低毛利、劳动密集型出口企业形成显著挤压。视频"利润约5%难抵7%升值"的逻辑方向正确，但实际升值幅度更高（约8%）。</li>
+        <li><b>贸易摩擦风险。</b>2026上半年对美顺差高企，叠加关税与汇率压力，贸易摩擦仍是真实风险，但成因复杂，不能全归因于升值。</li>
+        <li><b>出口增速回落信号。</b>7月增速较6月的+27.0%回落至+23.9%（单月），"抢出口"效应与高基数下，下半年高增持续性存疑。</li>
+        <li><b>政策依赖。</b>政府债务"借新还旧"依赖低利率与财政偿付能力，若财政收入承压，债务利息压力将上升。</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Takeaways -->
+  <section>
+    <h2><span class="num">06</span>核心结论</h2>
+    <div class="takeaway">
+      <div class="tk">
+        <div class="n">01</div>
+        <h4>方向可信，数据需修正</h4>
+        <p>"高顺差+资本管制造升值"逻辑成立，但通胀、债务、利率、出口增速等关键数据存在夸大或口径混淆，引用时须以官方数据为准。</p>
+      </div>
+      <div class="tk">
+        <div class="n">02</div>
+        <h4>不可归因于单一因素</h4>
+        <p>人民币升值是顺差、资本流动、美元周期与政策共同作用的结果，"高科技赚钱=升值原因"属过度简化。</p>
+      </div>
+      <div class="tk">
+        <div class="n">03</div>
+        <h4>升值持续性存疑</h4>
+        <p>出口增速已现回落、美元利差仍存、贸易摩擦叠加，升值并非单向必然，需持续跟踪中美利差与出口数据。</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <h3>数据来源</h3>
+    <ol class="sources">
+      <li>国家统计局《2026年7月份居民消费价格同比上涨0.5%》</li>
+      <li>海关总署《前7个月我国货物贸易进出口增长17.3%》及7月进出口数据</li>
+      <li>财政部《关于2025年中央和地方预算执行情况与2026年中央和地方预算草案的报告》——2025年末国债余额41.23万亿、地方债务余额54.82万亿</li>
+      <li>财政部·中国国债收益率曲线（2026-08-14，1年期国债1.21%）</li>
+      <li>中国货币网《政府债券利率历史数据》（1年期/10年期国债收益率）</li>
+      <li>中国外汇交易中心人民币对美元中间价及即期汇率（2026年7月，6.747）</li>
+      <li>国家外汇管理局《2026年上半年国际收支数据》（经常账户顺差3794亿美元）</li>
+      <li>东方财富数据中心·全球主要国家利率（美联储、欧元区利率）</li>
+    </ol>
+    <p class="disclaimer">本简报仅对公开数据与视频主张进行核验与修正，不构成任何投资建议。数据以官方发布为准，引用时请回溯原始来源核验时点口径。</p>
+  </footer>
+
+</div>
+</body>
+</html>
