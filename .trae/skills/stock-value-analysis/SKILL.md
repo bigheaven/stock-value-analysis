@@ -1,9 +1,9 @@
 ---
-name: "stock-analysis"
-description: "按五步分析流程+个股分析模板对单只股票进行全流程分析并生成Markdown报告。当用户说'分析一下XX股票'、'分析XX'、'看看XX'、'研究一下XX'时触发。支持A股、港股、美股。"
+name: "stock-value-analysis"
+description: "按价值投资五步分析流程+个股分析模板对单只股票进行全流程价值分析并生成Markdown报告。当用户说'分析一下XX股票'、'分析XX'、'看看XX'、'研究一下XX'时触发。支持A股、港股、美股。"
 ---
 
-# 个股分析 Skill
+# 个股价值分析 Skill
 
 按价值投资五步分析流程，对用户指定的股票进行全流程分析，严格按个股分析模板生成 Markdown 报告。
 
