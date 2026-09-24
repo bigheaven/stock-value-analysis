@@ -4,7 +4,7 @@
 //   node driver.mjs check [报告文件.md ...]   校验单份/多份主报告是否符合个股分析模板
 //   node driver.mjs check --all               校验 07_个股分析报告/ 下全部主报告
 //   node driver.mjs check-brs [BRS卡.md ...]  校验单份/多份 BRS v2.0 泡沫风险识别卡
-//   node driver.mjs check-brs --all           校验 08_BRS/02_个股识别卡/ 下全部 BRS 卡
+//   node driver.mjs check-brs --all           校验 08_泡沫风险识别/02_个股识别卡/ 下全部 BRS 卡
 //   node driver.mjs lint                      全库命名约定 + 断链检查
 // 退出码: 0 = 全部通过; 1 = 有错误
 import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
@@ -14,7 +14,7 @@ import { fileURLToPath } from 'node:url';
 const SKILL_DIR = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(SKILL_DIR, '..'); // 仓库根目录（scripts/ 的上一级）
 const REPORT_DIR = join(ROOT, '07_个股分析报告');
-const BRS_CARD_DIR = join(ROOT, '08_BRS', '02_个股识别卡');
+const BRS_CARD_DIR = join(ROOT, '08_泡沫风险识别', '02_个股识别卡');
 
 // BRS v2.0 卡 8 个强制 ## 章节关键词（数据有效性闸门在 frontmatter；利润质量三分离在 ### 子标题）
 // 每项：[标准名, 章节标题正则]——分析师可在多个变体中任选其一（如 A/H 价差专项卡/美团 WVR 卡的变体）
@@ -202,7 +202,7 @@ function lint() {
     checkName(p, false);
   }
 
-  console.log('\n== 命名约定检查（08_BRS/02_个股识别卡/） ==');
+  console.log('\n== 命名约定检查（08_泡沫风险识别/02_个股识别卡/） ==');
   if (existsSync(BRS_CARD_DIR)) {
     for (const f of readdirSync(BRS_CARD_DIR)) {
       if (f.endsWith('.md')) checkName(join(BRS_CARD_DIR, f), true);

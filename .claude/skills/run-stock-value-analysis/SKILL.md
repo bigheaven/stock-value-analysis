@@ -21,12 +21,12 @@ description: 按价值投资五步分析流程对个股做全流程价值分析�
 # 校验报告（0 错误才可提交）
 node scripts/driver.mjs check 07_个股分析报告/{名称}-{代码}.md
 node scripts/driver.mjs check --all   # 全部主报告
-node scripts/driver.mjs check-brs 08_BRS/02_个股识别卡/{名称}-{代码H}-泡沫风险识别卡.md   # BRS 卡校验
+node scripts/driver.mjs check-brs 08_泡沫风险识别/02_个股识别卡/{名称}-{代码H}-泡沫风险识别卡.md   # BRS 卡校验
 node scripts/driver.mjs check-brs --all   # 全部 BRS 卡
 node scripts/driver.mjs lint          # 命名约定 + 断链
 ```
 
 ```bash
 git add 07_个股分析报告/ && git commit -m "新增{名称}({代码})个股分析报告"
-git add 08_BRS/02_个股识别卡/ && git commit -m "新增{名称}({代码H}) BRS v2.0 泡沫风险识别卡"
+git add 08_泡沫风险识别/02_个股识别卡/ && git commit -m "新增{名称}({代码H}) BRS v2.0 泡沫风险识别卡"
 ```
