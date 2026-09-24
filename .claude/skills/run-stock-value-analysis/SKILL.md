@@ -1,6 +1,6 @@
 ---
 name: run-stock-value-analysis
-description: 按价值投资五步分析流程对个股做全流程价值分析并生成 Markdown 报告；校验报告结构、全库命名约定与断链。当用户说"分析一下XX股票""分析XX""看看XX""研究一下XX""帮我分析XX"时触发；说"检查报告/校验格式/断链检查"时触发。支持 A股、港股、美股。
+description: 按价值投资五步分析流程对个股做全流程价值分析并生成 Markdown 报告；校验报告结构、全库命名约定与断链。当用户说"分析一下XX股票""分析XX""看看XX""研究一下XX""帮我分析XX"时触发；说"识别泡沫""分析泡沫风险""检查XX是否有泡沫"时启动 BRS v2.0 识别卡流程；说"检查报告/校验格式/断链检查"时触发。支持 A股、港股、美股。
 ---
 
 # 个股价值分析（Claude Code 入口）
@@ -21,9 +21,12 @@ description: 按价值投资五步分析流程对个股做全流程价值分析�
 # 校验报告（0 错误才可提交）
 node scripts/driver.mjs check 07_个股分析报告/{名称}-{代码}.md
 node scripts/driver.mjs check --all   # 全部主报告
+node scripts/driver.mjs check-brs 08_BRS/02_个股识别卡/{名称}-{代码H}-泡沫风险识别卡.md   # BRS 卡校验
+node scripts/driver.mjs check-brs --all   # 全部 BRS 卡
 node scripts/driver.mjs lint          # 命名约定 + 断链
 ```
 
 ```bash
 git add 07_个股分析报告/ && git commit -m "新增{名称}({代码})个股分析报告"
+git add 08_BRS/02_个股识别卡/ && git commit -m "新增{名称}({代码H}) BRS v2.0 泡沫风险识别卡"
 ```
