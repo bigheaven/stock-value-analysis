@@ -61,18 +61,20 @@ function checkName(file, inSupp) {
     return;
   }
 
-  const code = parts[1];
-  const isHK = /^\d{5}H$/.test(code || '');
-  const isA = /^\d{6}$/.test(code || '');
+  const isCode = (s) => /^\d{5}H$/.test(s || '') || /^\d{6}$/.test(s || '') || /^[A-Z]{1,5}(\.[A-Za-z]{1,4})?$/.test(s || '');
+  // 代码段：主报告取最后一段（支持可选板块前缀 {板块}-{名称}-{代码}，如 运动鞋服-李宁-02331H.md）；补充分析取"主题"前一段
+  const code = inSupp ? parts[parts.length - 2] : parts[parts.length - 1];
   if (inSupp) {
     if (parts.length < 3) { err(`${b}: 补充分析命名应为 {名称}-{代码}-{主题}`); return; }
-    if (!isHK && !isA) err(`${b}: 代码段 "${code}" 不符合约定（A股6位 / 港股5位+H）`);
+    if (!isCode(code)) err(`${b}: 代码段 "${code}" 不符合约定（A股6位 / 港股5位+H / 境外 ticker）`);
   } else {
-    if (!isHK && !isA) err(`${b}: 命名应为 {名称}-{代码}.md（A股6位 / 港股5位+H）`);
+    if (parts.length < 2 || parts.length > 3) err(`${b}: 主报告命名应为 {名称}-{代码}.md 或 {板块}-{名称}-{代码}.md（A股6位 / 港股5位+H / 境外 ticker）`);
+    else if (!isCode(code)) err(`${b}: 代码段 "${code}" 不符合约定（A股6位 / 港股5位+H / 境外 ticker）`);
     if (!b.endsWith('.md')) err(`${b}: 主报告必须是 .md`);
   }
-  if (isHK) ok(`${b}: 港股命名合规`);
-  else if (isA) ok(`${b}: A股命名合规`);
+  if (/^\d{5}H$/.test(code || '')) ok(`${b}: 港股命名合规`);
+  else if (/^\d{6}$/.test(code || '')) ok(`${b}: A股命名合规`);
+  else if (/^[A-Z]{1,5}(\.[A-Za-z]{1,4})?$/.test(code || '')) ok(`${b}: 境外股命名合规`);
 }
 
 // ---------- 主报告结构校验（个股分析模板 12 章） ----------
